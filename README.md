@@ -1,6 +1,6 @@
 # Ingest NYC Taxi Data
 
-This project's objective is to retrieve [TLC Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page) on a scheduled basis using Prefect. The collected data is then stored in a PostgreSQL database. The orchestration of these services is managed through Docker Compose.
+This project's objective is to retrieve [TLC Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page) on a scheduled basis using Prefect. The collected data is then processed and stored in a PostgreSQL database. The orchestration of these services is managed through Docker Compose.
 
 ## Start the services
 
