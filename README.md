@@ -11,7 +11,7 @@ docker-compose build
 docker-compose up -d
 ```
 
-## Check the schedules in Prefect Server
+## Check scheduled tasks in the Prefect Server
 
 Proceed to [http://localhost:4200](http://localhost:4200) and select the "Deployment" section. You'll find a scheduled task configured to run every two months on the first day of each month. This schedule aligns with the update frequency of the website. The task is designed to fetch data from the past two months. It's worth noting that, at present, the task retrieves data from the same month in the previous year since data for the current year is not yet available.
 
