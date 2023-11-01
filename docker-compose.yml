@@ -1,0 +1,52 @@
+services:
+  flow-deployment:
+    container_name: ingest_trips_flow
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+     - PREFECT_API_URL=http://host.docker.internal:4200/api
+  prefect-database:
+    container_name: prefect-database
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=prefect
+    volumes:
+      - "./prefect_data:/var/lib/postgresql/data:rw"
+    ports:
+      - 5433:5432
+  prefect-server:
+    image: prefecthq/prefect:2-python3.10
+    restart: always
+    volumes:
+      - ./.prefect:/root/.prefect
+    entrypoint: ["/opt/prefect/entrypoint.sh", "prefect", "server", "start"]
+    environment:
+      - PREFECT_UI_URL=http://127.0.0.1:4200/api
+      - PREFECT_API_URL=http://127.0.0.1:4200/api
+      - PREFECT_SERVER_API_HOST=0.0.0.0
+      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://admin:password@prefect-database:5432/prefect
+    ports:
+      - 4200:4200
+    depends_on:
+      - prefect-database
+  pgdatabase:
+    container_name: trips-database
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=nyc_taxi_trip
+    volumes:
+      - ./ny_taxi_data:/var/lib/postgresql/data:rw
+    ports:
+      - 5432:5432
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - 8080:80
